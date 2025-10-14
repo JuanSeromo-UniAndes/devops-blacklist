@@ -22,7 +22,7 @@ A Flask REST API for managing email blacklists with JWT authentication.
 # Install dependencies
 poetry install
 
-# Set environment variables (optional)
+# Set environment variables (recommended for production)
 export DATABASE_URL="postgresql://user:password@localhost:5432/blacklist_db"
 export JWT_SECRET_KEY="your-jwt-secret"
 export SECRET_KEY="your-secret-key"
