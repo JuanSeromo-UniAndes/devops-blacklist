@@ -15,11 +15,11 @@ class GetBlacklistResource(Resource):
                 return {
                     "existing": True,
                     "blocked_reason": existing.blocked_reason
-                }, 409
-            if not existing:
+                }, 200
+            else:
                 return {
-                    "existing": False,
-                }
+                    "existing": False
+                }, 200
         except Exception as e:
-            return {'message': 'Error al obteber email: {}'.format(str(e))}, 500
+            return {'message': f'Error retrieving email: {str(e)}'}, 500
 
