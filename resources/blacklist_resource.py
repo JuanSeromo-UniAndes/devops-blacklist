@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import jwt_required
+from extensions import db
 from models.blacklist import Blacklist, BlacklistSchema
 import uuid
 import re
@@ -11,7 +12,6 @@ blacklist_schema = BlacklistSchema()
 class BlacklistResource(Resource):
     @jwt_required()
     def post(self):
-        from main import db
         try:
             data = request.get_json()
             if not data:

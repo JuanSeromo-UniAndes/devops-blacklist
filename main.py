@@ -1,29 +1,25 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
-from flask_restful import Api
-from sqlalchemy.orm import DeclarativeBase
-
 from config import Config
+from extensions import db, ma, jwt, api
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-class Base(DeclarativeBase):
-    pass
+# Inicializar extensiones
+db.init_app(app)
+ma.init_app(app)
+jwt.init_app(app)
 
-db = SQLAlchemy(app, model_class=Base)
-ma = Marshmallow(app)
-
-jwt = JWTManager(app)
-api = Api(app)
-
+# Importar recursos antes de inicializar API
 from resources.blacklist_resource import BlacklistResource
 from resources.get_blacklist_resource import GetBlacklistResource
 
+# Registrar recursos
 api.add_resource(BlacklistResource, '/blacklist')
 api.add_resource(GetBlacklistResource, '/blacklist/<string:email>')
+
+# Inicializar API después de registrar recursos
+api.init_app(app)
 
 
 @app.route('/blacklist/ping')
