@@ -1,2 +1,4 @@
 .idea
 .idea/**
+# Elastic Beanstalk Files
+.elasticbeanstalk/app_versions
