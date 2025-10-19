@@ -1,1 +1,1 @@
-web: /usr/local/bin/poetry run gunicorn -b 0.0.0.0:8000 main:app
+web: gunicorn -b 0.0.0.0:8000 main:app
