@@ -1,12 +1,13 @@
 branch-defaults:
   feature/eb-deploy:
     environment: blacklist-env
+    group_suffix: null
   main:
     environment: blacklist-env
 global:
   application_name: devops-blacklist
   branch: null
-  default_ec2_keyname: eb-blacklistkey
+  default_ec2_keyname: null
   default_platform: Python 3.13 running on 64bit Amazon Linux 2023
   default_region: us-east-1
   include_git_submodules: true
