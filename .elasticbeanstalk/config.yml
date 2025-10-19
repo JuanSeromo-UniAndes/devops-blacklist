@@ -2,6 +2,8 @@ branch-defaults:
   feature/eb-deploy:
     environment: blacklist-env
     group_suffix: null
+  feature/eb-deploy-requirements:
+    environment: blacklist-env
   main:
     environment: blacklist-env
 global:
