@@ -6,6 +6,7 @@ authors = [
     {name = "Juan Sebastian Rodriguez Moreno",email = "js.rodriguezm12345@uniandes.edu.co"}
 ]
 #readme = "README.md"
+[tool.poetry]
 requires-python = ">=3.13,<4"
 dependencies = [
     "flask (>=3.1.2,<4.0.0)",
