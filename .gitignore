@@ -2,3 +2,5 @@
 .idea/**
 # Elastic Beanstalk Files
 .elasticbeanstalk/app_versions
+.DS_Store
+**.DS_Store
