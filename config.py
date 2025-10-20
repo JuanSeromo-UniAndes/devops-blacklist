@@ -2,7 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key'
-    RDS_HOSTNAME = os.environ.get('RDS_HOSTNAME')
+    RDS_HOSTNAME = os.environ.get('RDS_HOSTNAME') or "awseb-e-arkyanxh7q-stack-awsebrdsdatabase-nipmwcmbd2ag.ci3w0yecas02.us-east-1.rds.amazonaws.com"
     RDS_PORT = os.environ.get('RDS_PORT') or '5432'
     RDS_DB_NAME = os.environ.get('RDS_DB_NAME')
     RDS_USERNAME = os.environ.get('RDS_USERNAME')
