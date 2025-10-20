@@ -591,3 +591,108 @@ OK - Immutable deployment
 ✅ **Más lento pero más seguro:** 18m 10s vs 8m 8s (Rolling) vs 1m 25s (All-at-once)
 
 ⚠️ **Trade-off:** Seguridad y zero-downtime a cambio de tiempo y recursos duplicados
+
+---
+
+# Validación del Despliegue Traffic Splitting en Ejecución
+
+## 1. Comando de despliegue con timestamps
+
+```bash
+echo "Traffic Splitting Deployment started at: $(date)" && eb deploy && echo "Traffic Splitting Deployment finished at: $(date)"
+```
+
+**Propósito:**
+- Captura hora de inicio y fin automáticamente
+- Muestra logs en tiempo real del proceso
+- Permite calcular el tiempo total de despliegue
+
+**Resultado:**
+```
+Traffic Splitting Deployment started at: Sun Oct 19 20:08:51 -05 2025
+...
+(CLI timeout después de 10 minutos)
+```
+
+**Tiempo total:** 11 minutos 12 segundos (verificado con eventos de AWS)
+
+---
+
+## 2. Monitoreo de eventos en tiempo real
+
+```bash
+eb events
+```
+
+**Propósito:**
+- Muestra el progreso del despliegue traffic splitting
+- Confirma la creación de instancias nuevas
+- Muestra el proceso de división de tráfico y evaluación
+
+**Resultado:**
+```
+2025-10-20 01:08:54    INFO    Environment update is starting.
+2025-10-20 01:09:04    INFO    Traffic Splitting deployment policy enabled. Preparing a new fleet for the new application version.
+2025-10-20 01:09:19    INFO    Created temporary auto scaling group awseb-e-47p3mk2m83-immutable-stack-AWSEBAutoScalingGroup-zjOx6PYfdwgq.
+2025-10-20 01:10:05    INFO    Added instance [i-00e9885384bec6b16] to your environment.
+2025-10-20 01:10:35    INFO    Traffic-splitting deployment: successfully launched 3 test instance(s).
+2025-10-20 01:10:37    INFO    Traffic-splitting deployment: starting to shift 20% of client traffic to the new application version.
+2025-10-20 01:10:37    INFO    Traffic-splitting deployment: routed 20% of client traffic to the new application version.
+2025-10-20 01:10:58    INFO    Traffic-splitting deployment: all instances that have the new application version passed load balancer health checks.
+2025-10-20 01:10:58    INFO    Traffic-splitting deployment: starting evaluation time for 5 minute(s).
+2025-10-20 01:11:05    INFO    Added instances [i-038c2509e875a76df, i-051e49f4f0c625197] to your environment.
+2025-10-20 01:12:54    INFO    Traffic-splitting deployment: all instances passed enhanced health check.
+2025-10-20 01:16:55    INFO    Traffic-splitting deployment: evaluation is complete.
+2025-10-20 01:16:55    INFO    Traffic-splitting deployment: starting to shift all client traffic to the new application version.
+2025-10-20 01:16:55    INFO    Traffic-splitting deployment: routed all client traffic to the new application version.
+2025-10-20 01:16:57    INFO    Detached old instance(s) from environment auto scaling group.
+2025-10-20 01:17:26    INFO    Detached new instance(s) from temporary auto scaling group.
+2025-10-20 01:17:30    INFO    Attached new instance(s) to the permanent auto scaling group.
+2025-10-20 01:17:39    INFO    Starting post-deployment configuration on new instances.
+2025-10-20 01:17:49    INFO    Instance deployment completed successfully.
+2025-10-20 01:20:03    INFO    Environment update completed successfully.
+```
+
+**Observaciones clave:**
+- Crea un **Auto Scaling Group temporal** para las nuevas instancias
+- Lanza **3 instancias nuevas** con la nueva versión
+- **Divide el tráfico:** 20% a nueva versión, 80% a versión vieja
+- **Evalúa por 5 minutos** el comportamiento de la nueva versión
+- Si todo está bien, **cambia 100% del tráfico** a la nueva versión
+- **Termina las instancias viejas** solo después de la evaluación exitosa
+
+---
+
+## Resumen de Validación Traffic Splitting
+
+✅ **Despliegue Traffic Splitting confirmado:** Creó instancias nuevas y dividió tráfico 20/80
+
+✅ **Zero downtime:** El servicio estuvo disponible durante todo el proceso (11 minutos)
+
+✅ **Canary deployment:** 20% del tráfico fue a nueva versión durante 5 minutos de evaluación
+
+✅ **3 instancias nuevas:** Todas con IDs y LaunchTime diferentes
+
+✅ **Evaluación exitosa:** Después de 5 minutos, cambió 100% del tráfico a nueva versión
+
+✅ **Validación con tráfico real:** Detecta problemas que health checks no pueden detectar
+
+⚠️ **Trade-off:** Tiempo de evaluación obligatorio (5 min) y recursos duplicados temporalmente
+
+---
+
+# Comparación Final de las 4 Estrategias
+
+| Estrategia | Tiempo | Downtime | Instancias | Validación | Uso Recomendado |
+|------------|--------|----------|------------|------------|------------------|
+| **All-at-Once** | 1m 25s | ❌ Sí (~7s) | Existentes | Al final | Desarrollo/Testing |
+| **Rolling** | 8m 8s | ✅ No | Existentes | Por batch | Producción estándar |
+| **Immutable** | 18m 10s | ✅ No | **Nuevas** | Progresiva | Producción crítica |
+| **Traffic Splitting** | 11m 12s | ✅ No | **Nuevas** | **Canary (20%)** | Producción de alto riesgo |
+
+## Recomendaciones por escenario:
+
+- **Desarrollo/Testing**: All-at-Once (más rápido)
+- **Producción estándar**: Rolling (balance tiempo/seguridad)
+- **Producción crítica**: Immutable (máxima seguridad)
+- **Deploys de alto riesgo**: Traffic Splitting (validación con tráfico real)
