@@ -1,0 +1,300 @@
+{
+	"info": {
+		"_postman_id": "12345678-1234-1234-1234-123456789012",
+		"name": "Blacklist API",
+		"description": "Collection for testing the Blacklist API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/blacklist/ping",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist",
+						"ping"
+					]
+				},
+				"description": "Check if the API is running"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Email to Blacklist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test@example.com\",\n  \"app_uuid\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"blocked_reason\": \"Spam activity\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/blacklist",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist"
+					]
+				},
+				"description": "Add an email to the blacklist"
+			},
+			"response": []
+		},
+		{
+			"name": "Check Email in Blacklist",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/blacklist/test@example.com",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist",
+						"test@example.com"
+					]
+				},
+				"description": "Check if an email is in the blacklist"
+			},
+			"response": []
+		},
+		{
+			"name": "Check Non-Existing Email",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/blacklist/notfound@example.com",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist",
+						"notfound@example.com"
+					]
+				},
+				"description": "Check an email that is not in the blacklist"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Duplicate Email (Should Fail)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test@example.com\",\n  \"app_uuid\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"blocked_reason\": \"Duplicate attempt\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/blacklist",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist"
+					]
+				},
+				"description": "Try to add the same email again (should return 400)"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Email with Invalid Format",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"invalid-email\",\n  \"app_uuid\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"blocked_reason\": \"Invalid format test\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/blacklist",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist"
+					]
+				},
+				"description": "Try to add an email with invalid format (should return 400)"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Email with Invalid UUID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"valid@example.com\",\n  \"app_uuid\": \"invalid-uuid\",\n  \"blocked_reason\": \"Invalid UUID test\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/blacklist",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist"
+					]
+				},
+				"description": "Try to add an email with invalid UUID (should return 400)"
+			},
+			"response": []
+		},
+		{
+			"name": "Unauthorized Access (No Token)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/blacklist/test@example.com",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist",
+						"test@example.com"
+					]
+				},
+				"description": "Try to access endpoint without token (should return 401)"
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer invalid_token_here",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/blacklist/test@example.com",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist",
+						"test@example.com"
+					]
+				},
+				"description": "Try to access endpoint with invalid token (should return 422)"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Another Email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"spammer@badsite.com\",\n  \"app_uuid\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"blocked_reason\": \"Confirmed spammer\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/blacklist",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"blacklist"
+					]
+				},
+				"description": "Add another email to test multiple entries"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "YOUR_JWT_TOKEN_HERE",
+			"type": "string"
+		}
+	]
+}
