@@ -1,0 +1,5 @@
+.gitignore
+02_packages.config
+.idea
+__pycache__
+.git

@@ -1,12 +1,11 @@
 [tool.poetry]
-name = "devops_entrega_1"
+name = "devops-entrega-1"
 version = "0.1.0"
 description = ""
-authors = ["Juan Sebastian Rodriguez Moreno <js.rodriguezm12345@uniandes.edu.co>"]
-package-mode = false
+authors = ["Juan Sebastian Rodriguez Moreno <js.rodriguezm12345@uniandes.edu.co>", "David Esteban Escobar Castro <de.escobarc1@uniandes.edu.co>", "Daniel Zapata <df.zapata@uniandes.edu.co>", "Eduard Bernal <e.bernalo@uniandes.edu.co>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<4.0"
 flask = "^3.1.2"
 flask-marshmallow = "^1.3.0"
 flask-sqlalchemy = "^3.1.1"
@@ -18,5 +17,5 @@ psycopg2-binary = "^2.9.11"
 gunicorn = "^23.0.0"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

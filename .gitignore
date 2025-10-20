@@ -43,3 +43,7 @@ logs/
 # Database
 *.db
 *.sqlite3
+.idea
+.idea/**
+# Elastic Beanstalk Files
+.elasticbeanstalk/app_versions

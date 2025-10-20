@@ -22,6 +22,10 @@ api.add_resource(GetBlacklistResource, '/blacklist/<string:email>')
 api.init_app(app)
 
 
+@app.route('/')
+def root():
+    return 'OK'
+
 @app.route('/blacklist/ping')
 def health_check():
     return 'pong'
