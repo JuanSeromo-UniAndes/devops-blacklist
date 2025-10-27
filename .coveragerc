@@ -1,0 +1,33 @@
+[run]
+source = resources, models/blacklist.py
+omit = 
+    */tests/*
+    */venv/*
+    */.venv/*
+    */env/*
+    */__pycache__/*
+    */site-packages/*
+    setup.py
+    */cloudcamp-edu/*
+    */despliegue/*
+    */docs/*
+    */.elasticbeanstalk/*
+    */.ebextensions/*
+    */instance/*
+    generate_token.py
+    deploy-strategies.py
+    application.py
+    config.py
+    main.py
+    extensions.py
+    models/models.py
+    models/__init__.py
+
+[report]
+fail_under = 70
+precision = 2
+show_missing = True
+skip_covered = False
+
+[html]
+directory = htmlcov
