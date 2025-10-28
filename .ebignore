@@ -3,3 +3,7 @@
 .idea
 __pycache__
 .git
+tests
+docs
+poetry.lock
+pyproject.toml
