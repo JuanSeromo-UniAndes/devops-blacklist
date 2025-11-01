@@ -1,10 +1,10 @@
 EnvironmentConfigurationMetadata:
   Description: Configuration created from the EB CLI using "eb config save".
-  DateCreated: '1760838066000'
-  DateModified: '1760838066000'
+  DateCreated: '1762021096000'
+  DateModified: '1762021096000'
 Platform:
   PlatformArn: arn:aws:elasticbeanstalk:us-east-1::platform/Python 3.13 running on
-    64bit Amazon Linux 2023/4.7.3
+    64bit Amazon Linux 2023/4.7.4
 OptionSettings:
   aws:elasticbeanstalk:command:
     BatchSize: '30'
@@ -20,6 +20,7 @@ OptionSettings:
     SystemType: enhanced
   aws:autoscaling:launchconfiguration:
     IamInstanceProfile: aws-elasticbeanstalk-ec2-role
+    EC2KeyName: eb-blacklistkey
   aws:autoscaling:updatepolicy:rollingupdate:
     RollingUpdateType: Health
     RollingUpdateEnabled: true

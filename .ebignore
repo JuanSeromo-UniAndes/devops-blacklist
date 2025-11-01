@@ -7,3 +7,6 @@ tests
 docs
 poetry.lock
 pyproject.toml
+venv
+.amazonq
+.venv
