@@ -13,7 +13,7 @@ phases:
       - pip install -r requirements.txt
   build:
     commands:
-      - gunicorn -b 0.0.0.0:8000 main:app
+      - python3 -m pytest tests/test_unit.py
 
 artifacts:
   files:
