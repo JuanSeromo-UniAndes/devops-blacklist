@@ -9,7 +9,6 @@ env:
 phases:
   pre_build:
     commands:
-      # - pip install awsebcli boto3
       - pip install -r requirements.txt
   build:
     commands:
