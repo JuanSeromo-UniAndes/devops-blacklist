@@ -1,5 +1,11 @@
 version: 0.2
 
+env:
+  variables:
+    RDS_DB_NAME: "blacklist_db"
+    SECRET_KEY: "super-secret"
+    JWT_SECRET_KEY: "super-secret"
+
 phases:
   pre_build:
     commands:

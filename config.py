@@ -20,11 +20,11 @@ def get_secret_value(secret_name, region='us-east-1'):
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'super-secret'
     RDS_DB_NAME = os.environ.get('RDS_DB_NAME')
-    RDS_USERNAME = os.environ.get('RDS_USERNAME')
-    RDS_PASSWORD = os.environ.get('RDS_PASSWORD')
+    RDS_USERNAME = get_secret_value("blacklist-rds-username")
+    RDS_PASSWORD = get_secret_value("blacklist-rds-password")
     secret_name = os.environ.get('RDS_HOSTNAME_SECRET', 'blacklist-rds-hostname')
     RDS_HOSTNAME = get_secret_value(secret_name)
-    RDS_PORT = os.environ.get('RDS_PORT', 5432)
+    RDS_PORT = get_secret_value("blacklist-rds-port")
 
     print(RDS_USERNAME, RDS_HOSTNAME)
    
