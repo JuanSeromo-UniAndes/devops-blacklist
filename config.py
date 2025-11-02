@@ -24,7 +24,9 @@ class Config:
     RDS_PASSWORD = os.environ.get('RDS_PASSWORD')
     secret_name = os.environ.get('RDS_HOSTNAME_SECRET', 'blacklist-rds-hostname')
     RDS_HOSTNAME = get_secret_value(secret_name)
-    RDS_PORT = os.environ.get('RDS_PORT')
+    RDS_PORT = os.environ.get('RDS_PORT', 5432)
+
+    print(RDS_USERNAME, RDS_HOSTNAME)
    
     if RDS_HOSTNAME:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{RDS_USERNAME}:{RDS_PASSWORD}@{RDS_HOSTNAME}:{RDS_PORT}/{RDS_DB_NAME}?connect_timeout=10"
