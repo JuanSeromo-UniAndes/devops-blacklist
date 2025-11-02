@@ -6,11 +6,12 @@ phases:
       python: 3.9
   pre_build:
     commands:
-      - pip install awsebcli
+      # - pip install awsebcli boto3
       - pip install -r requirements.txt
   build:
     commands:
-      - eb deploy
+      - gunicorn -b 0.0.0.0:8000 main:app
+
 artifacts:
   files:
     - '**/*'
