@@ -1,32 +1,37 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
-from flask_restful import Api
-from sqlalchemy.orm import DeclarativeBase
+from config import Config
 from sqlalchemy.exc import OperationalError
+from extensions import db, ma, jwt, api
+
+
 import logging
 
-from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-class Base(DeclarativeBase):
-    pass
 
-db = SQLAlchemy(app, model_class=Base)
-ma = Marshmallow(app)
+# Inicializar extensiones
+db.init_app(app)
+ma.init_app(app)
+jwt.init_app(app)
 
-jwt = JWTManager(app)
-api = Api(app)
 
 from resources.blacklist_resource import BlacklistResource
 from resources.get_blacklist_resource import GetBlacklistResource
 
 api.add_resource(BlacklistResource, '/blacklist')
 api.add_resource(GetBlacklistResource, '/blacklist/<string:email>')
+
+# Inicializar API después de registrar recursos
+api.init_app(app)
+
 logger = logging.getLogger(__name__)
+
+
+@app.route('/')
+def root():
+    return 'OK'
 
 
 @app.route('/blacklist/ping')
