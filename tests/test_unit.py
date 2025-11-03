@@ -109,7 +109,7 @@ def test_get_blacklist_exists(mock_blacklist, client):
     mock_blacklist.query.filter_by.return_value.first.return_value = mock_entry
     
     response = client.get('/blacklist/exists@example.com')
-    assert response.status_code == 409
+    assert response.status_code == 200
     data = response.get_json()
     assert data['existing'] == True
     assert data['blocked_reason'] == 'Test reason'
