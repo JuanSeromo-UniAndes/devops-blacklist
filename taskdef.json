@@ -1,0 +1,25 @@
+{
+    "executionRoleArn": "arn:aws:iam::780522923809:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "portMappings": [
+          {
+            "hostPort": 8000,
+            "protocol": "tcp",
+            "containerPort": 8000
+          }
+        ],
+
+        "essential": true,
+        "name": "blacklist-api"
+      }
+    ],
+
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "512",
+    "memory": "1024",
+    "family": "blacklist-api-task"
+  }

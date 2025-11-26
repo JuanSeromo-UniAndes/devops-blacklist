@@ -1,0 +1,29 @@
+{
+    "taskDefinition": "blacklist-api-task:1",
+    "cluster": "cluster-blacklist",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:780522923809:targetgroup/target-group-one/61e1834722999781",
+            "containerName": "blacklist-api",
+            "containerPort": 8000
+        }
+    ],
+    "desiredCount": 1,
+    "launchType": "FARGATE",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-0d5ef5d7c216aadb6",
+                "subnet-076f88f2978ad03c8"
+            ],
+            "securityGroups": [
+                "sg-05ea8e8c652cde300"
+            ],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+}
