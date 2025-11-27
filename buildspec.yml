@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     IMAGE_REPO_NAME: "blacklist-api"
-    IMAGE_TAG: "1.0"
+    IMAGE_TAG: "latest"
     AWS_DEFAULT_REGION: "us-east-1"
     ACCOUNT_ID: "780522923809"
     RDS_DB_NAME: "blacklistdb"
