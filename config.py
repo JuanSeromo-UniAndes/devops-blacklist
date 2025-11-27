@@ -36,12 +36,14 @@ class Config:
     RDS_HOSTNAME = get_secret_value('blacklist-rds-hostname')
     RDS_PORT = get_secret_value("blacklist-rds-port")
 
-    print(RDS_USERNAME, RDS_HOSTNAME)
+    print('hellodb', RDS_USERNAME, RDS_HOSTNAME)
    
     if RDS_HOSTNAME:
+        print('hello host')
         SQLALCHEMY_DATABASE_URI = f"postgresql://{RDS_USERNAME}:{RDS_PASSWORD}@{RDS_HOSTNAME}:{RDS_PORT}/{RDS_DB_NAME}?connect_timeout=10"
     else:
-        SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:mysecretpassword@localhost:5432/blacklist_db?connect_timeout=10'
+        print('hello local', RDS_HOSTNAME)
+        SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:mysecretpassword@blacklistdb.ci3w0yecas02.us-east-1.rds.amazonaws.com:5432/blacklistdb?connect_timeout=10'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'super-secret'
