@@ -6,6 +6,9 @@ Each function below targets a specific endpoint and performs
 These are not unit tests (no assertions) but utilities you can
 run manually or wrap in formal tests/benchmarks.
 """
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import random
 import string
@@ -13,6 +16,7 @@ from typing import List
 
 import requests
 from flask_jwt_extended import create_access_token
+from main import app  # or however your Flask app is created
 
 
 def _random_email() -> str:
@@ -99,20 +103,10 @@ def stress_get_blacklist(num_requests: int = 100, jwt_token: str = "test-token")
 	return statuses
 
 def _generate_test_token() -> str:
-	"""Generate a short-lived JWT.
 
-	NOTE: This helper previously used the Flask app context directly
-	via `flask_app.app_context()`. Since the stress tests now talk to
-	the running service over HTTP, you may instead want to obtain a
-	valid JWT from the deployed environment (or another helper).
+	with app.app_context():
+		return create_access_token(identity="test_user")
 
-	For now, this remains as a placeholder so callers can be wired to
-	a proper token source later.
-	"""
-
-	# TODO: Implement token retrieval suitable for your environment,
-	# for example by hitting an auth endpoint or using a known secret.
-	return "test-token"
 
 
 if __name__ == "__main__":
@@ -120,6 +114,6 @@ if __name__ == "__main__":
 	token = _generate_test_token()
 
 	# Example manual run; adjust jwt_token to a valid one if JWT is enforced.
-	print("Health check statuses:", stress_health_check())
-	# print("POST /blacklist statuses:", stress_add_blacklist(jwt_token=token))
+	# print("Health check statuses:", stress_health_check())
+	print("POST /blacklist statuses:", stress_add_blacklist(jwt_token=token))
 	# print("GET /blacklist/<email> statuses:", stress_get_blacklist(jwt_token=token))
