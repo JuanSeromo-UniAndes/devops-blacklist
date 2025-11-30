@@ -18,7 +18,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...          
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      # - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG . 
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f- . <<EOF FROM newrelic/infrastructure:latest ADD newrelic-infra.yml /etc/newrelic-infra.yml EOF
       - docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} 780522923809.dkr.ecr.us-east-1.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
