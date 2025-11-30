@@ -2,10 +2,11 @@ from flask import Flask
 from config import Config
 from sqlalchemy.exc import OperationalError
 from extensions import db, ma, jwt, api
-
+import newrelic.agent
 
 import logging
 
+newrelic.agent.initialize()
 
 app = Flask(__name__)
 app.config.from_object(Config)
