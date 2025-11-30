@@ -1,13 +1,6 @@
-"""Stress testing helpers for Blacklist API.
-
-Each function below targets a specific endpoint and performs
-100 requests using fake data appropriate for that endpoint.
-
-These are not unit tests (no assertions) but utilities you can
-run manually or wrap in formal tests/benchmarks.
-"""
 import os
 import sys
+import time
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import random
@@ -109,11 +102,50 @@ def _generate_test_token() -> str:
 
 
 
+def run_sustained_stress(
+    duration_minutes: int = 30,
+    requests_per_minute: int = 10,
+    jwt_token: str | None = None,
+) -> None:
+    """Run 10 requests every minute for the given duration.
+
+    Uses the existing stress_* helpers to actually hit the endpoints.
+    """
+
+    if jwt_token is None:
+        jwt_token = _generate_test_token()
+
+    for minute in range(duration_minutes):
+        print(f"\n=== Minute {minute + 1}/{duration_minutes} ===")
+
+        # 10 health checks
+        health_statuses = stress_health_check(num_requests=requests_per_minute)
+        print("Health check statuses:", health_statuses)
+
+        # 10 POSTs
+        post_statuses = stress_add_blacklist(
+            num_requests=requests_per_minute, jwt_token=jwt_token
+        )
+        print("POST /blacklist statuses:", post_statuses)
+
+        # 10 GETs
+        get_statuses = stress_get_blacklist(
+            num_requests=requests_per_minute, jwt_token=jwt_token
+        )
+        print("GET /blacklist/<email> statuses:", get_statuses)
+
+        # Sleep until next minute, except after the last iteration
+        if minute < duration_minutes - 1:
+            print("Sleeping 60 seconds before next batch...")
+            time.sleep(60)
+
+
 if __name__ == "__main__":
 	# Generate a valid JWT inside the proper app context
 	token = _generate_test_token()
 
+	run_sustained_stress(duration_minutes=30, requests_per_minute=10, jwt_token=token)
 	# Example manual run; adjust jwt_token to a valid one if JWT is enforced.
 	# print("Health check statuses:", stress_health_check())
-	print("POST /blacklist statuses:", stress_add_blacklist(jwt_token=token))
+	# print("POST /blacklist statuses:", stress_add_blacklist(jwt_token=token))
 	# print("GET /blacklist/<email> statuses:", stress_get_blacklist(jwt_token=token))
